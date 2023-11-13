@@ -11,4 +11,4 @@ Case dimensions, wall thickenes and radius of front and end edge slope can be se
 
 Case consist of top and bottom parts.
 
-![Case dissassembled](assets/Case-disassembled.png)
+![Case dissassembled](assets/Case-dissasembled.png)
