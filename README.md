@@ -38,6 +38,22 @@ Top part is made by module case_base() that is cut by module case_cut().
 
 ![Top structure](assets/top_structure.png)
 
-Therefore adding part to top can be done either adding them in top() module or by cutting something inside case_cut() using openscad difference() function. Cutting something inside csase_cut() module is very convenient for adding parts to something that is attached to internal slope of either front or rear edge.
+Therefore adding part to top can be done either adding them in top() module or by cutting something inside case_cut() using openscad difference() function. Cutting something inside csase_cut() module is very convenient for adding parts to something that is attached to internal slope of either front or rear edge such as a bottom screw posts in this example.
+
+### Bottom part
+
+Bottoom part is defined by module bottom().
+
+It is a simple cube with hole for attaching it to the top. 
+
+## Examples of printed cases
+
+Here is an example of using case for designing a complex case for Zynthian synthesizer.
+
+![Zynthian top](assets/zynthian_top.jpg)
+
+![Zynthian rear](assets/zynthian_rear.jpg)
+
+![Zynthian side](assets/zynthian_side.jpg)
 
 
