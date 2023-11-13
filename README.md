@@ -19,7 +19,10 @@ Internal dimensions are used because the main purpose of the case is for enclosi
 - outside depth  is depth + 2 * wall thickness (front and rear  wall thickness)
 - outside back height is back height + wall thickness + wall thickness /sin(90-slope angle)
 - outside front height is front height + wall thickness + wall thickness /sin(90-slope angle)
-where slope angle is atan(height difference/depth)
+
+where slope angle is atan(height difference/depth).
+
+NOTE: top of internal back and front will be trimmed by the slope depending on the circle radius.
 
 ## Main parts
 
