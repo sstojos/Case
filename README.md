@@ -7,6 +7,6 @@ It is developed using openscad and therefore easily customzable programaticaly f
 
 Case dimensions, wall thickenes and radius of front and end edge slope can be set.
 
-##Main parts
+## Main parts
 
 Case consist of top and bottom parts.
