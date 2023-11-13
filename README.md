@@ -28,9 +28,11 @@ NOTE: top of internal back and front will be trimmed by the slope depending on t
 
 Case consist of top and bottom parts.
 
-![Case dissassembled](assets/Case-dissasembled.png)
+![Case componenets](assets/Case-dissasembled.png)
 
 ### Top part
 
 Top part is made by module case_base that is cut by module case_cut. 
+
+![Top structure](assets/top_structure.png)
 
