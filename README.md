@@ -12,8 +12,9 @@ The following case parameters can be configured:
 - wall thickenes
 - radius for front and end edge slope
 
-Case dimensions for depth, width, back and front height are internal case dimension. 
 ![Case dimensions](assets/dimensions.png)
+
+Case dimensions for depth, width, back and front height are internal case dimension. 
 
 Internal dimensiosn are used becasue case at teh end is for enclosing somthign insdie it. Therefore case outside dimensiosn are the following:
 - outside width is width + 2 * wall thickenes (left and right wall tickness)
@@ -26,3 +27,8 @@ Internal dimensiosn are used becasue case at teh end is for enclosing somthign i
 Case consist of top and bottom parts.
 
 ![Case dissassembled](assets/Case-dissasembled.png)
+
+### Top part
+
+Top part is made by case_base that is cut by case_cut.
+
