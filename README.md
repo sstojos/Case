@@ -32,7 +32,12 @@ Case consist of top and bottom parts.
 
 ### Top part
 
-Top part is made by module case_base that is cut by module case_cut. 
+Top part is rendered by module top().
+
+Top part is made by module case_base() that is cut by module case_cut(). 
 
 ![Top structure](assets/top_structure.png)
+
+Therefore adding part to top can be done either adding them in top() module or by cutting something inside case_cut() using openscad difference() function. Cutting something inside csase_cut() module is very convenient for adding parts to something that is attached to internal slope of either front or rear edge.
+
 
