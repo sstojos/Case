@@ -1,19 +1,52 @@
+//-----------------------------------------------------------------------------------------
+// Case
+//
+// Copyright (C) Stojos
+//-----------------------------------------------------------------------------------------
+// This program is free software: you can redistribute it and/or modify it under the terms
+// of the GNU General Public License as published by the Free Software Foundation, either 
+// version 3 of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+// without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+//
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with this program.
+// If not, see <https://www.gnu.org/licenses/>.
+//-----------------------------------------------------------------------------------------
+
 $fn=124;
 
-//case dimensions are for internal space 
-width=160;
-depth=135;
-frontHeight=36;
-backHeight=52;
+//-----------------------------------------------------------------------------------------
+// Case dimensions
+// NOTE: Case dimensions are for internal space and therefore :
+//  - outside width is width + 2 * wallThickenes (left and right walltickness)
+//  - ouside depth  is depth + 2 * wallThickenes (front and bottom wall tickness)
+//  - outside back height is backHeight + wallThickenes + wallThickenes/sin(90-slopeAngle)
+//  - outside front height is frontHeight + wallThickenes + wallThickenes/sin(90-slopeAngle)
+//-----------------------------------------------------------------------------------------
+width=100;
+depth=100;
+frontHeight=30;
+backHeight=40;
 wallThickenes=3;
+edgeRadius=15;
+//-----------------------------------------------------------------------------------------
+// End of Case dimensions defintion
+//-----------------------------------------------------------------------------------------
 
+// helpfull calcualations
+heightDiff = backHeight-frontHeight;
+slopeAngle = atan(heightDiff/depth);
 
-
+echo("angle of slope is: ", slopeAngle);
 
 render_all();
+
 module render_all() {    
-   top();
-   bottom();  
+   translate([0,0,10]) top();
+   translate([0,0,-10]) bottom();  
 }
 
 //top();
@@ -54,27 +87,127 @@ module bottom() {
 module case_base() {
     translate([0,width+2*wallThickenes,0]) 
     rotate ([90,0,0])
-    hull() {
-        linear_extrude(height = width+2*wallThickenes) polygon( points=[[0,0],[0,backHeight+wallThickenes],[0+5,backHeight+5+wallThickenes],[depth+wallThickenes*2-5,frontHeight+wallThickenes+5], [depth+wallThickenes*2,frontHeight+wallThickenes],[depth+wallThickenes*2,0]]);
-        translate([0+5,backHeight+wallThickenes,0]) cylinder(h = width+2*wallThickenes, r1 = 5, r2 = 5, center = false);
-        translate([depth+wallThickenes*2-5,frontHeight+wallThickenes,0]) cylinder(h = width+2*wallThickenes, r1 = 5, r2 = 5, center = false);
+    hull() { 
+        linear_extrude(height = width+2*wallThickenes) 
+            polygon( 
+                points=[
+                    [0,0],
+                    [0,
+                        wallThickenes
+                        +backHeight
+                        +wallThickenes/sin(90-slopeAngle)
+                        -edgeRadius
+                        -(edgeRadius-wallThickenes)*heightDiff/depth],
+                    [0+edgeRadius,
+                        wallThickenes
+                        +backHeight
+                        +wallThickenes/sin(90-slopeAngle)
+                        -(edgeRadius-wallThickenes)*heightDiff/depth],
+                    [depth
+                     +wallThickenes*2
+                     -edgeRadius,
+                        wallThickenes
+                        +frontHeight
+                        +wallThickenes/sin(90-slopeAngle)
+                        +(edgeRadius-wallThickenes)*heightDiff/depth],
+                    [depth
+                     +wallThickenes*2,
+                        wallThickenes
+                        +frontHeight
+                        +wallThickenes/sin(90-slopeAngle)
+                        -edgeRadius
+                        +(edgeRadius-wallThickenes)*heightDiff/depth],
+                    [depth+wallThickenes*2,0]
+                        ]
+                );
+                
+        translate([
+            0+edgeRadius,
+                wallThickenes
+                +backHeight
+                +wallThickenes/sin(90-slopeAngle)
+                -edgeRadius
+                -(edgeRadius-wallThickenes)*heightDiff/depth,
+            0])
+            cylinder(h=width+2*wallThickenes, r1=edgeRadius, r2=edgeRadius, center = false);
+        translate([
+            depth+wallThickenes*2-edgeRadius,
+                wallThickenes
+                +frontHeight
+                +wallThickenes/sin(90-slopeAngle)
+                -edgeRadius
+                +(edgeRadius-wallThickenes)*heightDiff/depth,
+            0])
+            cylinder(h=width+2*wallThickenes, r1=edgeRadius, r2=edgeRadius, center = false);
     }
 }
 
 
 //case_cut();
 module case_cut() {
-    translate([wallThickenes,wallThickenes,0]) 
+    translate([wallThickenes,wallThickenes,0])
     difference() {
         union() {
-              scale([depth/(depth+2*wallThickenes),width/(width+2*wallThickenes),(backHeight+5)/(backHeight+5+wallThickenes)-0.014]) case_base();
+              scale([
+                depth/(depth+2*wallThickenes),
+                width/(width+2*wallThickenes),
+                backHeight/(backHeight+wallThickenes/sin(90-slopeAngle))])             
+                case_base();
             //add a bottom part so that it properly cuts bottom
             translate([0,0,-2]) cube([depth,width, 3]);
             
         }
-       translate([-1,-1,wallThickenes]) cube([10,10,backHeight+5]);
-       translate([-1,1+width-10,wallThickenes]) cube([10,10,backHeight+5]);
-       translate([depth-10+1,-1,wallThickenes]) cube([10,10,frontHeight+5]);
-       translate([depth-10+1,1+width-10,wallThickenes]) cube([10,10,frontHeight+5]);
+       translate([-1,-1,wallThickenes]) cube([10,10,backHeight+2*wallThickenes]);
+       translate([-1,1+width-10,wallThickenes]) cube([10,10,backHeight+2*wallThickenes]);
+       translate([depth-10+1,-1,wallThickenes]) cube([10,10,frontHeight+2*wallThickenes]);
+       translate([depth-10+1,1+width-10,wallThickenes]) cube([10,10,frontHeight+2*wallThickenes]);
     }
+}
+
+//test_dimensions();
+module test_dimensions() {
+    color("black") translate([wallThickenes, -20, wallThickenes]) 
+        translate([0,10,0]) 
+            rotate ([90,0,0])
+                linear_extrude(height = 10) 
+                    polygon( 
+                        points=[
+                            [0,0],
+                            [0,backHeight],
+                            [depth,frontHeight],
+                            [depth,0]
+                        ]
+                    );
+    color("red") translate([0, -10, 0]) 
+        translate([0,10,0]) 
+            rotate ([90,0,0])
+                linear_extrude(height = 10) 
+                    polygon( 
+                        points=[
+                            [0,0],
+                            [0,
+                                backHeight
+                                +2*wallThickenes
+                                -edgeRadius
+                                -(edgeRadius-wallThickenes)*heightDiff/depth],
+                            [0
+                             +edgeRadius,
+                                backHeight
+                                +2*wallThickenes
+                                -(edgeRadius-wallThickenes)*heightDiff/depth],
+                            [depth+wallThickenes*2
+                             -edgeRadius,
+                                frontHeight
+                                +2*wallThickenes
+                                +(edgeRadius-wallThickenes)*heightDiff/depth],
+                            [depth
+                             +wallThickenes*2,
+                                frontHeight
+                                +2*wallThickenes
+                                -edgeRadius
+                                +(edgeRadius-wallThickenes)*heightDiff/depth],
+                            [depth+wallThickenes*2,0]
+                        ]
+                   );
+
 }
