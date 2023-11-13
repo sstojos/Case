@@ -22,7 +22,7 @@ $fn=124;
 // Case dimensions
 // NOTE: Case dimensions are for internal space and therefore :
 //  - outside width is width + 2 * wallThickenes (left and right walltickness)
-//  - ouside depth  is depth + 2 * wallThickenes (front and bottom wall tickness)
+//  - ouside depth  is depth + 2 * wallThickenes (front and rear wall tickness)
 //  - outside back height is backHeight + wallThickenes + wallThickenes/sin(90-slopeAngle)
 //  - outside front height is frontHeight + wallThickenes + wallThickenes/sin(90-slopeAngle)
 //-----------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ depth=100;
 frontHeight=30;
 backHeight=40;
 wallThickenes=3;
-edgeRadius=15;
+edgeRadius=10;
 //-----------------------------------------------------------------------------------------
 // End of Case dimensions defintion
 //-----------------------------------------------------------------------------------------
@@ -42,11 +42,13 @@ slopeAngle = atan(heightDiff/depth);
 
 echo("angle of slope is: ", slopeAngle);
 
-render_all();
+render_all(assembled=false);
 
-module render_all() {    
-   translate([0,0,10]) top();
-   translate([0,0,-10]) bottom();  
+module render_all(assembled=true) {    
+   if (!assembled) {
+       translate([0,0,10]) top(); } else top();
+   if (!assembled) {
+    translate([0,0,-10]) bottom(); } else bottom();
 }
 
 //top();
